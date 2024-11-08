@@ -1,40 +1,35 @@
-import cv2
-from pyzbar.pyzbar import decode
-import matplotlib.pyplot as plt
+import os
+import torch
+import torch.optim as optim
+import torch.nn as nn
+from torchvision import transforms
+from torch.utils.data import DataLoader
+from dataset import barcode_Dataset
+from train import train_model
+from model import SimpleCNN
 
-def detect_and_decode_barcode(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Define the transformations
+transform = transforms.Compose([
+    transforms.Resize((128,128)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))
+])
 
-    # Detect barcodes in the grayscale image
-    barcodes = decode(gray)
+# Load Dataset and Data Loaders
+root_dir_path = os.path.join('C:', 'Users', 'venky', 'Downloads', 'archive', 'images')
+dataset = barcode_Dataset(root_dir=root_dir_path, transform=transform)
+train_size = int(0.8 * len(dataset))
+val_size = len(dataset) - train_size
+train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
 
-    # Loop over detected barcodes
-    for barcode in barcodes:
-        # Extract barcode data and type
-        barcode_data = barcode.data.decode("utf-8")
-        barcode_type = barcode.type
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
-        # Print barcode data and type
-        print("Barcode Data:", barcode_data)
-        print("Barcode Type:", barcode_type)
+# Initialize Model, Criterion and Optimizer
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = SimpleCNN().to(device)
+criterion = torch.nn.BCELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-        # Draw a rectangle around the barcode
-        (x, y, w, h) = barcode.rect
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-
-        # Put barcode data and type on the image
-        cv2.putText(image, f"{barcode_data} ({barcode_type})",
-                    (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-
-    # Convert image from BGR to RGB (Matplotlib uses RGB)
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-    plt.imshow(image_rgb)
-    plt.axis('off')
-    plt.show()
-
-# Read input image
-image = cv2.imread(r"C:\Users\samri\OneDrive\Pictures\QR_code_for_mobile_English_Wikipedia.svg.png")
-
-detect_and_decode_barcode(image)
-
+# Train the Model
+train_model(model, train_loader, val_loader, criterion, optimizer, epochs=10)
