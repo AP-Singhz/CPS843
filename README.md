@@ -2,8 +2,8 @@ When running this code in a terminal, I made sure to use the "Anaconda" terminal
 
 Specs:
 
-Terminal: Anaconda 'conda'
+- Terminal: Anaconda 'conda'
 
-Device: 'cuda' if found. If not found, the code will use the CPU instead
+- Device: 'cuda' if found. If not found, the code will use the CPU instead
 
-Python version: 3.10.9
+- Python version: 3.10.9
