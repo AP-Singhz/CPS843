@@ -16,7 +16,7 @@ transform = transforms.Compose([
 ])
 
 # Load Dataset and Data Loaders
-root_dir_path = os.path.join('C:', 'Users', 'venky', 'Downloads', 'archive', 'images')
+root_dir_path = r"C:\Users\samri\Downloads\barcode_bb\barcode_bb"
 dataset = barcode_Dataset(root_dir=root_dir_path, transform=transform)
 train_size = int(0.8 * len(dataset))
 val_size = len(dataset) - train_size
