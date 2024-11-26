@@ -38,7 +38,7 @@ class SimpleCNN(nn.Module):
 
 # Load your pre-trained model
 model = SimpleCNN()
-model.load_state_dict(torch.load('model.pth'))  # Load the saved model weights
+model.load_state_dict(torch.load(r'C:\Users\samri\OneDrive\Desktop\CPS843\CPS843\model.pth'))  # Load the saved model weights
 model.eval()  # Set the model to evaluation mode
 
 # OpenCV to capture video
