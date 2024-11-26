@@ -12,7 +12,7 @@ def main():
 
     # Define transformations: resize, normalize, and convert to tensor
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),  
+        transforms.Resize((224, 224)),  # ResNet-50 requires 224x224 images
         transforms.ToTensor(),          
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) 
     ])
@@ -33,7 +33,7 @@ def main():
     # Load pre-trained ResNet-50 model
     model = models.resnet50(weights="IMAGENET1K_V1")  # Use the recommended weights API
 
-    model.fc = nn.Linear(model.fc.in_features, 2)  
+    model.fc = nn.Linear(model.fc.in_features, 2)  # Modify the final layer for binary classification
     model.to(device)
 
     criterion = nn.CrossEntropyLoss()
@@ -75,6 +75,10 @@ def main():
         epoch_loss = running_loss / len(train_loader)
         epoch_accuracy = 100 * correct / total
         print(f"Epoch {epoch+1}/{num_epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.2f}%")
+
+    # After training is complete, save the model
+    torch.save(model.state_dict(), 'resnet50_trained_model.pth')
+    print("Model saved successfully!")
 
     # Test the model
     model.eval()  # Set model to evaluation mode
