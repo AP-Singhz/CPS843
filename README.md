@@ -6,7 +6,7 @@ Specs:
 
 - Device: 'cuda' if found. If not found, the code will use the CPU instead
 
-- Python version: 3.10.9
+- Python version used: 3.12.7
 
 
 This project uses many Python libraries for deep learning, image processing as well as image transformation. The following libraries are required to run this project:
