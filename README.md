@@ -23,3 +23,14 @@ In order to install these libraries, in your terminal, run:
     pip install Pillow
 
 After succesful installation, Navigate to the BarcodeDecoderWithDefectDetection.py file in order to run this in python
+
+## Running the Project
+
+After the successful installation of the required libraries, navigate to the `BarcodeDecoderWithDefectDetection.py` file and run it using Python. You can simply click the link below to access the file:
+
+[BarcodeDecoderWithDefectDetection.py](./BarcodeDecoderWithDefectDetection.py)
+
+Then run it using:
+
+```bash
+python BarcodeDecoderWithDefectDetection.py
